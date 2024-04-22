@@ -52,8 +52,9 @@ jobs:
         docker cp ${{ github.workspace }} vertica_docker:/var/odbc-loader
         docker exec -u dbadmin vertica_docker /bin/bash -c "sudo chown -R dbadmin:verticadba /var/odbc-loader"
         docker exec -w /var/odbc-loader -u dbadmin vertica_docker /bin/bash -c "source /opt/rh/devtoolset-7/enable; \
-        make; \
+        make CXXFLAGS=\"-D_GLIBCXX_USE_CXX11_ABI=1\"; \
         make install"
+        
     - name: Install ODBC clients
       run: |
         docker exec -w /var/odbc-loader -u root vertica_docker wget https://downloads.mysql.com/archives/get/p/10/file/https://downloads.mysql.com/archives/get/p/10/file/mysql-connector-odbc-8.2.0-1.el7.src.rpm
